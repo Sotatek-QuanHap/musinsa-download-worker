@@ -1,0 +1,3 @@
+
+KAFKA_BROKERS=musinsa-kafka:29092
+KAFKA_CLIENT=musinsa-client

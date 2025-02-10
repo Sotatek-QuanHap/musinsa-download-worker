@@ -2,9 +2,9 @@ FROM node:20-alpine as builder
 WORKDIR /home/node/app
 COPY ./package.json ./
 RUN chown -R node:node /home/node/app
-RUN yarn install
+RUN npm install
 COPY . .
-RUN yarn build
+RUN npm run build
 
 FROM node:20-alpine as production
 WORKDIR /home/node/app

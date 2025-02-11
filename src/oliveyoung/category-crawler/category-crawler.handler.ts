@@ -1,20 +1,20 @@
 /* eslint-disable prefer-rest-params */
 import { Injectable } from '@nestjs/common';
 import { BaseKafkaHandler } from 'src/utils/base.handler';
-import { PDPCrawlerService } from './pdp-crawler.service';
+import { CategoryCrawlerService } from './category-crawler.service';
 import { ConfigService } from '@nestjs/config';
 import { SandyLogger } from 'src/utils/sandy.logger';
 import KafkaProducerService from 'src/kafka/kafka.producer';
-import { KafkaTopics, PDPCrawlerConfigs } from '../constants';
+import { CategoryCrawlerConfigs, KafkaTopics } from '../constants';
 
 @Injectable()
-export class PDPCrawlerHandler extends BaseKafkaHandler {
+export class CategoryCrawlerHandler extends BaseKafkaHandler {
   constructor(
     configService: ConfigService,
-    private readonly crawlerService: PDPCrawlerService,
+    private readonly crawlerService: CategoryCrawlerService,
     private readonly kafkaProducer: KafkaProducerService,
   ) {
-    super(configService, PDPCrawlerConfigs.name);
+    super(configService, CategoryCrawlerConfigs.name);
     this.params = arguments;
   }
 
@@ -28,23 +28,25 @@ export class PDPCrawlerHandler extends BaseKafkaHandler {
 
     // Send to Kafka for parsing
     await this.kafkaProducer.send({
-      topic: KafkaTopics.pdpParserRequest,
+      topic: KafkaTopics.categoryParserRequest,
       message: JSON.stringify({ url: data.productUrl, html }),
     });
   }
 
-  // PDPCrawler listens to PDPCrawlerRequest topic
+  // CategoryCrawler listens to Category topic
   getTopicNames(): string {
-    return KafkaTopics.pdpCrawlerRequest;
+    return KafkaTopics.categoryCrawlerRequest;
   }
 
   getGroupId(): string {
-    return PDPCrawlerConfigs.groupId;
+    return CategoryCrawlerConfigs.groupId;
   }
 
   getCount(): number {
-    return this.configService.get('app.oliveYoung.numberOfPdpCrawlers', 0, {
-      infer: true,
-    });
+    return this.configService.get(
+      'app.oliveYoung.numberOfCategoryCrawlers',
+      0,
+      { infer: true },
+    );
   }
 }

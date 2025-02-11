@@ -6,6 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { SandyLogger } from 'src/utils/sandy.logger';
 import KafkaProducerService from 'src/kafka/kafka.producer';
 import puppeteer from 'puppeteer';
+import { KafkaTopics, PLPCrawlerConfigs } from '../constants';
 
 @Injectable()
 export class PLPCrawlerHandler extends BaseKafkaHandler {
@@ -14,14 +15,7 @@ export class PLPCrawlerHandler extends BaseKafkaHandler {
     private readonly crawlerService: PLPCrawlerService,
     private readonly kafkaProducer: KafkaProducerService,
   ) {
-    super(
-      configService,
-      configService.get(
-        'app.oliveyoung.plpCrawler.name',
-        'olive_young_plp_crawler',
-        { infer: true },
-      ),
-    );
+    super(configService, PLPCrawlerConfigs.name);
     this.params = arguments;
   }
 
@@ -46,23 +40,19 @@ export class PLPCrawlerHandler extends BaseKafkaHandler {
     });
 
     const totalPages = Math.ceil((totalProducts || 0) / (perProductPage || 1));
+
     const pages = Array.from({ length: totalPages }, (_, i) => i + 5);
     for (const index in pages) {
       const page = await browser.newPage();
-      await page.goto(
-        `${data.url}&pageIdx=${index + 1}&rowsPerPage=${perProductPage}`,
-      );
+      const url = `${data.url}&pageIdx=${Number(index) + 1}&rowsPerPage=${perProductPage}`;
+      await page.goto(url);
       const html = await page.evaluate(() => document.body.innerHTML);
-      console.log('pageIdx: ', index + 1);
+      console.log('pageIdx: ', Number(index) + 1);
 
       await this.kafkaProducer.send({
-        topic: this.configService.get<string>(
-          'app.oliveYoung.topics.plpParserRequest',
-          'olive-young.plp-parser.request',
-          { infer: true },
-        ),
+        topic: KafkaTopics.plpCrawlerRequest,
         message: JSON.stringify({
-          url: `${data.url}&pageIdx=${index + 1}&rowsPerPage=${perProductPage}`,
+          url,
           html,
         }),
       });
@@ -71,26 +61,16 @@ export class PLPCrawlerHandler extends BaseKafkaHandler {
 
   // PLPCrawler listens to PLP topic
   getTopicNames(): string {
-    return this.configService.get(
-      'app.oliveYoung.topics.plpCrawlerRequest',
-      'olive-young.plp.request',
-      { infer: true },
-    );
+    return KafkaTopics.plpCrawlerRequest;
   }
 
   getGroupId(): string {
-    return this.configService.get(
-      'app.oliveYoung.plpCrawler.groupId',
-      'olive-young-plp-crawler-group',
-      { infer: true },
-    );
+    return PLPCrawlerConfigs.groupId;
   }
 
   getCount(): number {
-    return this.configService.get(
-      'app.oliveYoung.plpCrawler.numberOfHandlers',
-      0,
-      { infer: true },
-    );
+    return this.configService.get('app.oliveYoung.numberOfPlpCrawlers', 0, {
+      infer: true,
+    });
   }
 }

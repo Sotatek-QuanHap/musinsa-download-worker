@@ -57,7 +57,7 @@ export default class KafkaProducerService {
     if (key) {
       msg.key = key;
     }
-    console.log('send to kafka ', topic, message);
+    console.log('sending to topic', topic);
     while (!this.connected) {
       await TimeUtils.sleep(1000);
     }

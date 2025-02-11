@@ -11,7 +11,7 @@ export class KafkaConsumerService {
 
   async listen(handler: BaseKafkaHandler) {
     const processCount = handler.getCount();
-    console.log('processCount');
+    console.log('processCount', processCount, handler.name);
     if (!processCount) {
       return;
     }
@@ -40,7 +40,10 @@ export class KafkaConsumerService {
       return;
     }
 
-    console.log('Startfunc: ', this.configService.get('app.kafka'));
+    console.log(
+      'Startfunc: ',
+      this.configService.get('app.kafka', { infer: true }),
+    );
     const kafka = new Kafka({
       logLevel: logLevel.INFO,
       brokers: this.configService
@@ -57,7 +60,7 @@ export class KafkaConsumerService {
       ),
     });
 
-    const groupId = await handlerInstance.getGroupId();
+    const groupId = handlerInstance.getGroupId();
     const kafkaConfig = {
       groupId,
       sessionTimeout: +this.configService.get<number>(

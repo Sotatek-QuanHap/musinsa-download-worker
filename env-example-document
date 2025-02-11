@@ -1,3 +1,11 @@
-
-KAFKA_BROKERS=musinsa-kafka:29092
+KAFKA_BROKERS=localhost:9094
 KAFKA_CLIENT=musinsa-client
+
+# Olive Young configs
+OLIVE_YOUNG_CRAWLER_PDP_CRAWLER_NAME=olive_young_pdp_crawler
+OLIVE_YOUNG_PDP_CRAWLER_GROUP_ID=olive-young-pdp-crawler-group
+OLIVE_YOUNG_PDP_CRAWLER_NUMBER=1
+
+OLIVE_YOUNG_KAFKA_PDP_CRAWLER_REQUEST_TOPIC=olive-young.pdp-crawler.request
+OLIVE_YOUNG_KAFKA_PDP_PARSER_REQUEST_TOPIC=olive-young.pdp-parser.request
+OLIVE_YOUNG_KAFKA_PDP_RESULT_TOPIC=olive-young.pdp-parser.request

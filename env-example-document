@@ -9,3 +9,13 @@ OLIVE_YOUNG_PDP_CRAWLER_NUMBER=1
 OLIVE_YOUNG_KAFKA_PDP_CRAWLER_REQUEST_TOPIC=olive-young.pdp-crawler.request
 OLIVE_YOUNG_KAFKA_PDP_PARSER_REQUEST_TOPIC=olive-young.pdp-parser.request
 OLIVE_YOUNG_KAFKA_PDP_RESULT_TOPIC=olive-young.pdp-parser.request
+
+OLIVE_YOUNG_CRAWLER_CATEGORY_CRAWLER_NAME=olive_young_category_crawler
+OLIVE_YOUNG_CATEGORY_CRAWLER_GROUP_ID=olive-young-category-crawler-group
+OLIVE_YOUNG_CATEGORY_CRAWLER_NUMBER=1
+
+
+OLIVE_YOUNG_KAFKA_CATEGORY_CRAWLER_REQUEST_TOPIC=olive-young.category-crawler.request
+OLIVE_YOUNG_KAFKA_CATEGORY_PARSER_REQUEST_TOPIC=olive-young.category-parser.request
+OLIVE_YOUNG_KAFKA_CATEGORY_RESULT_TOPIC=olive-young.category-parser.request
+

@@ -65,6 +65,7 @@ export abstract class BaseKafkaHandler {
     try {
       const rs = await this.process(msg, logger);
       await this.onProcessSuccess(kafkaData, msg, rs, logger);
+      logger.complete();
     } catch (error) {
       await this.onProcessError(kafkaData, msg, error, logger);
     }

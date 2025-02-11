@@ -82,6 +82,25 @@ class EnvironmentVariablesValidator {
 
   @IsString()
   OLIVE_YOUNG_PDP_CRAWLER_GROUP_ID: string;
+
+  @IsInt()
+  @IsOptional()
+  OLIVE_YOUNG_PLP_CRAWLER_NUMBER: number;
+
+  @IsString()
+  OLIVE_YOUNG_KAFKA_PLP_CRAWLER_REQUEST_TOPIC: string;
+
+  @IsString()
+  OLIVE_YOUNG_KAFKA_PLP_PARSER_REQUEST_TOPIC: string;
+
+  @IsString()
+  OLIVE_YOUNG_KAFKA_PLP_RESULT_TOPIC: string;
+
+  // @IsString()
+  // OLIVE_YOUNG_CRAWLER_PLP_CRAWLER_NAME: string;
+
+  @IsString()
+  OLIVE_YOUNG_PLP_CRAWLER_GROUP_ID: string;
 }
 
 export default registerAs<AppConfig>('app', () => {
@@ -114,6 +133,14 @@ export default registerAs<AppConfig>('app', () => {
           'olive-young-crawler-group',
         numberOfHandlers: process.env.OLIVE_YOUNG_PDP_CRAWLER_NUMBER || 0,
       },
+      plpCrawler: {
+        name:
+          process.env.OLIVE_YOUNG_PLP_CRAWLER_NAME || 'olive_young_plp_crawler',
+        groupId:
+          process.env.OLIVE_YOUNG_PLP_CRAWLER_GROUP_ID ||
+          'olive-young-crawler-group',
+        numberOfHandlers: process.env.OLIVE_YOUNG_PlP_CRAWLER_NUMBER || 0,
+      },
       topics: {
         pdpCrawlerRequest:
           process.env.OLIVE_YOUNG_KAFKA_PDP_CRAWLER_REQUEST_TOPIC ||
@@ -124,6 +151,15 @@ export default registerAs<AppConfig>('app', () => {
         pdpResult:
           process.env.OLIVE_YOUNG_KAFKA_PDP_RESULT_TOPIC ||
           'olive-young.pdp-parser.request',
+        plpCrawlerRequest:
+          process.env.OLIVE_YOUNG_KAFKA_PLP_CRAWLER_REQUEST_TOPIC ||
+          'olive-young.plp-crawler.request',
+        plpParserRequest:
+          process.env.OLIVE_YOUNG_KAFKA_PLP_PARSER_REQUEST_TOPIC ||
+          'olive-young.plp-parser.request',
+        plpResult:
+          process.env.OLIVE_YOUNG_KAFKA_PLP_RESULT_TOPIC ||
+          'olive-young.plp-parser.request',
       },
     },
   };

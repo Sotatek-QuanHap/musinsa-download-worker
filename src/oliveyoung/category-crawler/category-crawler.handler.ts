@@ -5,6 +5,7 @@ import { CategoryCrawlerService } from './category-crawler.service';
 import { ConfigService } from '@nestjs/config';
 import { SandyLogger } from 'src/utils/sandy.logger';
 import KafkaProducerService from 'src/kafka/kafka.producer';
+import { KafkaTopics } from '../constants';
 
 @Injectable()
 export class CategoryCrawlerHandler extends BaseKafkaHandler {
@@ -13,14 +14,7 @@ export class CategoryCrawlerHandler extends BaseKafkaHandler {
     private readonly crawlerService: CategoryCrawlerService,
     private readonly kafkaProducer: KafkaProducerService,
   ) {
-    super(
-      configService,
-      configService.get(
-        'app.oliveyoung.categoryCrawler.name',
-        'olive_young_category_crawler',
-        { infer: true },
-      ),
-    );
+    super(configService, 'olive_young_category_crawler');
     this.params = arguments;
   }
 
@@ -34,35 +28,23 @@ export class CategoryCrawlerHandler extends BaseKafkaHandler {
 
     // Send to Kafka for parsing
     await this.kafkaProducer.send({
-      topic: this.configService.get<string>(
-        'app.oliveYoung.topics.categoryParserRequest',
-        'olive-young.category-parser.request',
-        { infer: true },
-      ),
+      topic: KafkaTopics.categoryParserRequest,
       message: JSON.stringify({ url: data.productUrl, html }),
     });
   }
 
   // CategoryCrawler listens to Category topic
   getTopicNames(): string {
-    return this.configService.get(
-      'app.oliveYoung.topics.categoryCrawlerRequest',
-      'olive-young.category-crawler.request',
-      { infer: true },
-    );
+    return KafkaTopics.categoryCrawlerRequest;
   }
 
   getGroupId(): string {
-    return this.configService.get(
-      'app.oliveYoung.categoryCrawler.groupId',
-      'olive-young-category-crawler-group',
-      { infer: true },
-    );
+    return 'olive-young-category-crawler-group';
   }
 
   getCount(): number {
     return this.configService.get(
-      'app.oliveYoung.categoryCrawler.numberOfHandlers',
+      'app.oliveYoung.numberOfCategoryCrawlers',
       0,
       { infer: true },
     );

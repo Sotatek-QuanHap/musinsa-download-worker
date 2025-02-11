@@ -34,7 +34,7 @@ export abstract class BaseKafkaHandler {
   public async setup() {}
 
   public getCount() {
-    const key = `number_of_${this.name}`;
+    const key = `number_of_${this.name}`.toUpperCase();
     const processCount = this.configService.get<number>(key, 0, {
       infer: true,
     });

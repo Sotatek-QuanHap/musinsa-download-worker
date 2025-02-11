@@ -55,6 +55,12 @@ class EnvironmentVariablesValidator {
   @IsString()
   @IsOptional()
   KAFKA_CLIENT: string;
+
+  @IsString()
+  CRAWLER_CATEGORY_REQUEST_TOPIC: string;
+
+  @IsString()
+  PARSER_CATEGORY_REQUEST_TOPIC: string;
 }
 
 export default registerAs<AppConfig>('app', () => {
@@ -77,6 +83,13 @@ export default registerAs<AppConfig>('app', () => {
     kafka: {
       brokers: process.env.KAFKA_BROKERS || 'localhost:29092',
       client: process.env.KAFKA_CLIENT || 'musinsa-client',
+    },
+    topics: {
+      categoryCrawlerRequest:
+        process.env.CRAWLER_CATEGORY_REQUEST_TOPIC ||
+        'category-crawler.request',
+      categoryParserRequest:
+        process.env.PARSER_CATEGORY_REQUEST_TOPIC || 'category-parser.request',
     },
   };
 });

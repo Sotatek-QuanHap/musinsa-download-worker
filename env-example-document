@@ -1,4 +1,9 @@
 
 KAFKA_BROKERS=musinsa-kafka:29092
 KAFKA_CLIENT=musinsa-client
-number_of_olive-young.category-crawl.request=1
+
+CRAWLER_CATEGORY_REQUEST_TOPIC=category-crawl.request
+NUMBER_OF_OLIVE-YOUNG.CATEGORY-CRAWL.REQUEST=1
+
+PARSER_CATEGORY_REQUEST_TOPIC=category-parser.request
+NUMBER_OF_OLIVE-YOUNG.CATEGORY-PARSER.REQUEST=1

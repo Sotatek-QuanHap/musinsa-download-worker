@@ -9,7 +9,7 @@ export const CategoryCrawlerConfigs = {
 };
 
 export const KafkaTopics = {
-  categoryCrawlerRequest: 'olive-young.category-crawl.request',
+  categoryCrawlerRequest: 'olive-young.category-crawler.request',
   categoryParserRequest: 'olive-young.category-parser.request',
 
   plpCrawlerRequest: 'olive-young.plp-crawler.request',

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import appConfig from './config/app.config';
 import { ConfigModule } from '@nestjs/config';
 import { KafkaModule } from './kafka/kafka.module';
-import { PDPCrawlerModule as OliveYoungPDPCrawlerModule } from './olive-young-pdp-crawler/pdp-crawler.module';
+import { OliveYoungModule } from './oliveyoung/oliveyoung.module';
 
 @Module({
   imports: [
@@ -13,7 +13,7 @@ import { PDPCrawlerModule as OliveYoungPDPCrawlerModule } from './olive-young-pd
       envFilePath: ['.env'],
     }),
     KafkaModule,
-    OliveYoungPDPCrawlerModule,
+    OliveYoungModule,
   ],
 })
 export class AppModule {}

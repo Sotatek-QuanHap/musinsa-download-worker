@@ -1,6 +1,6 @@
 /* eslint-disable prefer-rest-params */
 import { Injectable } from '@nestjs/common';
-import { BaseKafkaHandler } from '../utils/base.handler';
+import { BaseKafkaHandler } from 'src/utils/base.handler';
 import { PDPCrawlerService } from './pdp-crawler.service';
 import { ConfigService } from '@nestjs/config';
 import { SandyLogger } from 'src/utils/sandy.logger';

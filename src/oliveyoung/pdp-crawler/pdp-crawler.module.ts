@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { KafkaConsumerService } from '../kafka/kafka.consumer';
-import { KafkaModule } from '../kafka/kafka.module';
+import { KafkaConsumerService } from 'src/kafka/kafka.consumer';
+import { KafkaModule } from 'src/kafka/kafka.module';
 import { PDPCrawlerHandler } from './pdp-crawler.handler';
 import { PDPCrawlerService } from './pdp-crawler.service';
 import { ConfigModule } from '@nestjs/config';

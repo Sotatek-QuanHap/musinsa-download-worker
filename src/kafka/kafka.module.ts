@@ -12,6 +12,6 @@ import { KafkaConsumerService } from './kafka.consumer';
 })
 export class KafkaModule {
   constructor(private kafkaProducer: KafkaProducerService) {
-    // void this.kafkaProducer.start();
+    void this.kafkaProducer.start();
   }
 }

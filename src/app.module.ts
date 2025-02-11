@@ -3,6 +3,7 @@ import appConfig from './config/app.config';
 import { ConfigModule } from '@nestjs/config';
 import { KafkaModule } from './kafka/kafka.module';
 import { ConsumerTestModule } from './consumer-test/consumer-test.module';
+import { OliveYoungModule } from './oliveyoung/module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ConsumerTestModule } from './consumer-test/consumer-test.module';
     }),
     KafkaModule,
     ConsumerTestModule,
+    OliveYoungModule,
   ],
 })
 export class AppModule {}

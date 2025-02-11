@@ -19,12 +19,16 @@ export abstract class BaseKafkaHandler {
       this.configService.get(`from_begin_${this.name}`, '1', {
         infer: true,
       }) == '1';
-    this.params = params;
+    this.params = arguments;
   }
 
   public clone() {
     const cloneClass: any = this.constructor;
     return new cloneClass(...this.params);
+  }
+
+  public setName(name: string) {
+    this.name = name;
   }
 
   public async setup() {}

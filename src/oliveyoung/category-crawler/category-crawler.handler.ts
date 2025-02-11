@@ -5,7 +5,7 @@ import { CategoryCrawlerService } from './category-crawler.service';
 import { ConfigService } from '@nestjs/config';
 import { SandyLogger } from 'src/utils/sandy.logger';
 import KafkaProducerService from 'src/kafka/kafka.producer';
-import { KafkaTopics } from '../constants';
+import { CategoryCrawlerConfigs, KafkaTopics } from '../constants';
 
 @Injectable()
 export class CategoryCrawlerHandler extends BaseKafkaHandler {
@@ -14,7 +14,7 @@ export class CategoryCrawlerHandler extends BaseKafkaHandler {
     private readonly crawlerService: CategoryCrawlerService,
     private readonly kafkaProducer: KafkaProducerService,
   ) {
-    super(configService, 'olive_young_category_crawler');
+    super(configService, CategoryCrawlerConfigs.name);
     this.params = arguments;
   }
 
@@ -39,7 +39,7 @@ export class CategoryCrawlerHandler extends BaseKafkaHandler {
   }
 
   getGroupId(): string {
-    return 'olive-young-category-crawler-group';
+    return CategoryCrawlerConfigs.groupId;
   }
 
   getCount(): number {

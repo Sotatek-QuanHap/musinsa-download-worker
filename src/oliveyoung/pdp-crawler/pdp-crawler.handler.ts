@@ -5,7 +5,7 @@ import { PDPCrawlerService } from './pdp-crawler.service';
 import { ConfigService } from '@nestjs/config';
 import { SandyLogger } from 'src/utils/sandy.logger';
 import KafkaProducerService from 'src/kafka/kafka.producer';
-import { KafkaTopics } from '../constants';
+import { KafkaTopics, PDPCrawlerConfigs } from '../constants';
 
 @Injectable()
 export class PDPCrawlerHandler extends BaseKafkaHandler {
@@ -14,7 +14,7 @@ export class PDPCrawlerHandler extends BaseKafkaHandler {
     private readonly crawlerService: PDPCrawlerService,
     private readonly kafkaProducer: KafkaProducerService,
   ) {
-    super(configService, 'olive_young_pdp_crawler');
+    super(configService, PDPCrawlerConfigs.name);
     this.params = arguments;
   }
 
@@ -39,7 +39,7 @@ export class PDPCrawlerHandler extends BaseKafkaHandler {
   }
 
   getGroupId(): string {
-    return 'olive-young-pdp-crawler-group';
+    return PDPCrawlerConfigs.groupId;
   }
 
   getCount(): number {

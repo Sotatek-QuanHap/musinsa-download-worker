@@ -5,6 +5,7 @@ import { PDPCrawlerService } from './pdp-crawler.service';
 import { ConfigService } from '@nestjs/config';
 import { SandyLogger } from 'src/utils/sandy.logger';
 import KafkaProducerService from 'src/kafka/kafka.producer';
+import { KafkaTopics, PDPCrawlerConfigs } from '../constants';
 
 @Injectable()
 export class PDPCrawlerHandler extends BaseKafkaHandler {
@@ -13,14 +14,7 @@ export class PDPCrawlerHandler extends BaseKafkaHandler {
     private readonly crawlerService: PDPCrawlerService,
     private readonly kafkaProducer: KafkaProducerService,
   ) {
-    super(
-      configService,
-      configService.get(
-        'app.oliveyoung.pdpCrawler.name',
-        'olive_young_pdp_crawler',
-        { infer: true },
-      ),
-    );
+    super(configService, PDPCrawlerConfigs.name);
     this.params = arguments;
   }
 
@@ -34,37 +28,23 @@ export class PDPCrawlerHandler extends BaseKafkaHandler {
 
     // Send to Kafka for parsing
     await this.kafkaProducer.send({
-      topic: this.configService.get<string>(
-        'app.oliveYoung.topics.pdpParserRequest',
-        'olive-young.pdp-parser.request',
-        { infer: true },
-      ),
+      topic: KafkaTopics.pdpParserRequest,
       message: JSON.stringify({ url: data.productUrl, html }),
     });
   }
 
-  // PDPCrawler listens to PLP topic
+  // PDPCrawler listens to PDPCrawlerRequest topic
   getTopicNames(): string {
-    return this.configService.get(
-      'app.oliveYoung.topics.pdpCrawlerRequest',
-      'olive-young.pdp-crawler.request',
-      { infer: true },
-    );
+    return KafkaTopics.pdpCrawlerRequest;
   }
 
   getGroupId(): string {
-    return this.configService.get(
-      'app.oliveYoung.pdpCrawler.groupId',
-      'olive-young-pdp-crawler-group',
-      { infer: true },
-    );
+    return PDPCrawlerConfigs.groupId;
   }
 
   getCount(): number {
-    return this.configService.get(
-      'app.oliveYoung.pdpCrawler.numberOfHandlers',
-      0,
-      { infer: true },
-    );
+    return this.configService.get('app.oliveYoung.numberOfPdpCrawlers', 0, {
+      infer: true,
+    });
   }
 }

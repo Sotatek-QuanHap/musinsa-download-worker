@@ -56,51 +56,13 @@ class EnvironmentVariablesValidator {
   @IsOptional()
   KAFKA_CLIENT: string;
 
-  @IsString()
-  @IsOptional()
-  KAFKA_PDP_CRAWLER_TOPIC: string;
-
-  @IsString()
-  @IsOptional()
-  KAFKA_PLP_CRAWLER_TOPIC: string;
-
-  @IsInt()
-  @IsOptional()
-  OLIVE_YOUNG_PDP_CRAWLER_NUMBER: number;
-
-  @IsString()
-  OLIVE_YOUNG_KAFKA_PDP_CRAWLER_REQUEST_TOPIC: string;
-
-  @IsString()
-  OLIVE_YOUNG_KAFKA_PDP_PARSER_REQUEST_TOPIC: string;
-
-  @IsString()
-  OLIVE_YOUNG_KAFKA_PDP_RESULT_TOPIC: string;
-
-  @IsString()
-  OLIVE_YOUNG_CRAWLER_PDP_CRAWLER_NAME: string;
-
-  @IsString()
-  OLIVE_YOUNG_PDP_CRAWLER_GROUP_ID: string;
-
   @IsInt()
   @IsOptional()
   OLIVE_YOUNG_CATEGORY_CRAWLER_NUMBER: number;
 
-  @IsString()
-  OLIVE_YOUNG_KAFKA_CATEGORY_CRAWLER_REQUEST_TOPIC: string;
-
-  @IsString()
-  OLIVE_YOUNG_KAFKA_CATEGORY_PARSER_REQUEST_TOPIC: string;
-
-  @IsString()
-  OLIVE_YOUNG_KAFKA_CATEGORY_RESULT_TOPIC: string;
-
-  @IsString()
-  OLIVE_YOUNG_CRAWLER_CATEGORY_CRAWLER_NAME: string;
-
-  @IsString()
-  OLIVE_YOUNG_CATEGORY_CRAWLER_GROUP_ID: string;
+  @IsInt()
+  @IsOptional()
+  OLIVE_YOUNG_PDP_CRAWLER_NUMBER: number;
 }
 
 export default registerAs<AppConfig>('app', () => {
@@ -125,43 +87,10 @@ export default registerAs<AppConfig>('app', () => {
       client: process.env.KAFKA_CLIENT || 'musinsa-client',
     },
     oliveYoung: {
-      pdpCrawler: {
-        name:
-          process.env.OLIVE_YOUNG_PDP_CRAWLER_NAME || 'olive_young_pdp_crawler',
-        groupId:
-          process.env.OLIVE_YOUNG_PDP_CRAWLER_GROUP_ID ||
-          'olive-young-crawler-group',
-        numberOfHandlers: process.env.OLIVE_YOUNG_PDP_CRAWLER_NUMBER || 0,
-      },
-      categoryCrawler: {
-        name:
-          process.env.OLIVE_YOUNG_CATEGORY_CRAWLER_NAME ||
-          'olive_young_category_crawler',
-        groupId:
-          process.env.OLIVE_YOUNG_CATEGORY_CRAWLER_GROUP_ID ||
-          'olive-young-crawler-group',
-        numberOfHandlers: process.env.OLIVE_YOUNG_CATEGORY_CRAWLER_NUMBER || 0,
-      },
-      topics: {
-        pdpCrawlerRequest:
-          process.env.OLIVE_YOUNG_KAFKA_PDP_CRAWLER_REQUEST_TOPIC ||
-          'olive-young.pdp-crawler.request',
-        pdpParserRequest:
-          process.env.OLIVE_YOUNG_KAFKA_PDP_PARSER_REQUEST_TOPIC ||
-          'olive-young.pdp-parser.request',
-        pdpResult:
-          process.env.OLIVE_YOUNG_KAFKA_PDP_RESULT_TOPIC ||
-          'olive-young.pdp-parser.request',
-        categoryCrawlerRequest:
-          process.env.OLIVE_YOUNG_KAFKA_CATEGORY_CRAWLER_REQUEST_TOPIC ||
-          'olive-young.category-crawler.request',
-        categoryParserRequest:
-          process.env.OLIVE_YOUNG_KAFKA_CATEGORY_PARSER_REQUEST_TOPIC ||
-          'olive-young.category-parser.request',
-        categoryResult:
-          process.env.OLIVE_YOUNG_KAFKA_CATEGORY_RESULT_TOPIC ||
-          'olive-young.category-parser.request',
-      },
+      numberOfCategoryCrawlers:
+        process.env.OLIVE_YOUNG_CATEGORY_CRAWLER_NUMBER || 0,
+      numberOfPdpCrawlers: process.env.OLIVE_YOUNG_PDP_CRAWLER_NUMBER || 0,
+      numberOfPlpCrawlers: process.env.OLIVE_YOUNG_PLP_CRAWLER_NUMBER || 0,
     },
   };
 });

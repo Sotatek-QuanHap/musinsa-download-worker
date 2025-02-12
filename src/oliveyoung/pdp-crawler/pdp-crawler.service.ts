@@ -16,4 +16,18 @@ export class PDPCrawlerService {
       this.logger.error(`Error fetching ${productUrl}: ${error.message}`);
     }
   }
+
+  async fetchProductExtraInfo(productUrl: string) {
+    try {
+      const url = new URL(productUrl);
+      const productId = url.searchParams.get('goodsNo');
+      const extraInfoURL = `${url.origin}/store/goods/getGoodsArtcAjax.do?goodsNo=${productId}`;
+      const { data: html } = await axios.post(extraInfoURL);
+      return html;
+    } catch (error) {
+      this.logger.error(
+        `Error fetching extra infor ${productUrl}: ${error.message}`,
+      );
+    }
+  }
 }

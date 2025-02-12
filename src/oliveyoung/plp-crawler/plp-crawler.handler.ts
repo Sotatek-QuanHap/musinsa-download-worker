@@ -5,7 +5,6 @@ import { PLPCrawlerService } from './plp-crawler.service';
 import { ConfigService } from '@nestjs/config';
 import { SandyLogger } from 'src/utils/sandy.logger';
 import KafkaProducerService from 'src/kafka/kafka.producer';
-import puppeteer from 'puppeteer';
 import { KafkaTopics, PLPCrawlerConfigs } from '../constants';
 
 @Injectable()
@@ -25,38 +24,22 @@ export class PLPCrawlerHandler extends BaseKafkaHandler {
 
   public async process(data: any, logger: SandyLogger): Promise<void> {
     logger.log(`Processing product: ${data.url}`);
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
+    const page = 1;
+    const maximumPageSize = 10000;
+    const url = `${data.url}&pageIdx=${page}&rowsPerPage=${maximumPageSize}`;
+    const currentUrl = new URL(url);
+    const searchParams = currentUrl.searchParams;
+    const categoryId = searchParams.get('dispCatNo');
+    const html = await this.crawlerService.fetchProduct(url);
 
-    await page.goto(data.url);
-
-    const totalProducts = await page.evaluate(() => {
-      const element = document.querySelector('.cate_info_tx span');
-      return element ? parseInt(element?.textContent?.trim() || '0', 10) : 0;
+    await this.kafkaProducer.send({
+      topic: KafkaTopics.plpParserRequest,
+      message: JSON.stringify({
+        url,
+        html,
+        categoryId,
+      }),
     });
-    const perProductPage = await page.evaluate(() => {
-      const element = document.querySelector('.count_sort.tx_num ul li.on a');
-      return element ? parseInt(element?.textContent?.trim() || '0', 10) : 0;
-    });
-
-    const totalPages = Math.ceil((totalProducts || 0) / (perProductPage || 1));
-
-    const pages = Array.from({ length: totalPages }, (_, i) => i + 5);
-    for (const index in pages) {
-      const page = await browser.newPage();
-      const url = `${data.url}&pageIdx=${Number(index) + 1}&rowsPerPage=${perProductPage}`;
-      await page.goto(url);
-      const html = await page.evaluate(() => document.body.innerHTML);
-      console.log('pageIdx: ', Number(index) + 1);
-
-      await this.kafkaProducer.send({
-        topic: KafkaTopics.plpCrawlerRequest,
-        message: JSON.stringify({
-          url,
-          html,
-        }),
-      });
-    }
   }
 
   // PLPCrawler listens to PLP topic

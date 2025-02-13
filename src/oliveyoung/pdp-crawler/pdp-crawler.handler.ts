@@ -24,19 +24,12 @@ export class PDPCrawlerHandler extends BaseKafkaHandler {
 
   public async process(data: any, logger: SandyLogger): Promise<void> {
     logger.log(`Processing product: ${data.url}`);
-    const [productHtml, extraInfoHtml] = await Promise.all([
-      this.crawlerService.fetchProduct(data.url),
-      this.crawlerService.fetchProductExtraInfo(data.url),
-    ]);
+    const fetchedInfos = await this.crawlerService.fetchInfos(data.url);
 
     // Send to Kafka for parsing
     await this.kafkaProducer.send({
       topic: KafkaTopics.pdpParserRequest,
-      message: JSON.stringify({
-        url: data.url,
-        productHtml,
-        extraInfoHtml,
-      }),
+      message: JSON.stringify(fetchedInfos),
     });
   }
 

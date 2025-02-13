@@ -33,7 +33,7 @@ export class PDPCrawlerHandler extends BaseKafkaHandler {
     await this.kafkaProducer.send({
       topic: KafkaTopics.pdpParserRequest,
       message: JSON.stringify({
-        url: data.productUrl,
+        url: data.url,
         productHtml,
         extraInfoHtml,
       }),
